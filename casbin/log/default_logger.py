@@ -1,7 +1,7 @@
 from .logger import Logger
 import logging
 
-logging.basicConfig(level=logging.NOTSET, format="%(asctime)s - %(levelname)s - %(message)s")
+logger = logging.getLogger('casbin')
 
 
 class DefaultLogger(Logger):
@@ -12,6 +12,7 @@ class DefaultLogger(Logger):
     def enable_log(self, enable):
         """controls whether print the message."""
         self.enable = enable
+        self.set_logger()
 
     def is_enabled(self):
         """returns if logger is enabled."""
@@ -23,9 +24,18 @@ class DefaultLogger(Logger):
             s = ""
             for vv in v:
                 s = s + str(vv)
-            logging.info(s)
+            logger.info(s)
 
     def writef(self, fmt, *v):
         """formats according to a format specifier and logs the message."""
         if self.enable:
-            logging.info(fmt, *v)
+            logger.info(fmt, *v)
+
+    def set_logger(self, log_level=logging.INFO, handler=None):
+        logger.setLevel(log_level)
+        if handler is None:
+            handler = logging.StreamHandler()
+            fmt = "%(asctime)s - %(levelname)s - %(message)s"
+            formatter = logging.Formatter(fmt)
+            handler.setFormatter(formatter)
+        logger.addHandler(handler)
