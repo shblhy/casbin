@@ -3,9 +3,9 @@ from .default_logger import DefaultLogger
 logger = DefaultLogger()
 
 
-def set_logger(l):
-    """sets the current logger."""
-    logger = l
+def set_logger(level, handler=None):
+    """set log level and handler"""
+    logger.set_logger(level, handler)
 
 
 def get_logger():
